@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title></title>
+  </head>
+  <body>
+  </body>
+  <script type="module">
+    import { ajax } from "../js/ajax.js";
+
+    /*
+     * -------------------------------------------------------
+     *  Promise.race()  -- Api 是一种短路的逻辑，在多个 Promise
+     *  中取出最快成功的结果。
+     * -------------------------------------------------------
+     * */
+
+    let first = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve("first");
+      }, 2000);
+    });
+
+    let second = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve("second");
+      }, 1000);
+      // reject("second failure");
+    });
+
+    Promise.race([first, second])
+      .then((value) => {
+        console.log(value);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    // -----------------------------------------------
+    // 基于这个race() api 封装一个接口请求超时的示例：
+
+    function query(url, delay = 2000) {
+      let promise = [
+        ajax(url),
+        new Promise((resolve, reject) => {
+          setTimeout(() => {
+            reject("接口请求超时");
+          }, delay);
+        }),
+      ];
+      return Promise.race(promise);
+    }
+
+    // 使用 不同的超时时间，可以测试出，当接口反馈时间超过了规定的
+    // 接口响应时间，就会出现接口超时的请求结果
+    query("http://localhost:8080/restful/articles/3", 3000).then(
+      (value) => {
+        console.log(value);
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
+  </script>
+</html>

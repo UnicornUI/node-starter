@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title></title>
+    link
+  </head>
+  <body>
+    body
+  </body>
+  <script type="module">
+
+    import { ajax } from "../js/ajax.js"
+
+    /*
+    -------------------------------------------------------------------------
+     使用 Promise.resolve() 实现方法结果缓存，这样可以在一个页面多次调用相同
+     查询的时候使用缓存，避免多次后台查询
+    ------------------------------------
+    */
+
+    function query(name) {
+      const cache = query.cache || (query.cache = new Map());
+      if (cache.has(name)){
+        console.log("cache....");
+        // 直接使用 Promise 的静态函数返回，这时候的Promise直接
+        // 返回的是执行之后的状态
+        return Promise.resolve(cache.get(name));
+      }
+      return ajax(`http://localhost:8080/restful/articles/${name}`)
+        .then(
+          article => {
+            cache.set(name, article)
+            console.log("no cache...")
+            return article;
+          }
+      );
+    }
+
+    // 查询
+    query("34464").then(value=>{
+      console.log(value);
+    });
+
+    // 延迟之后再次访问
+    setTimeout(()=>{
+      query("43453").then(article => {
+            console.log(article);
+      })
+    },2000);
+
+  </script>
+
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title></title>
+      
+  </head>
+  <body>
+      
+  </body>
+  <script type="module">
+
+    import { ajax } from '../js/ajax.js'
+    /*
+    -----------------------------------------------------
+    类中具有 then 方法的时候, 在异步使用的时候会被封装成一个
+    Promise 对象，这时候可以与 await 连用达到 promise 相同的
+    效果
+    */
+    class Article{ 
+      constructor(id){
+        this.id = id;
+      }
+      then(resolve, reject){
+        // 这里不改变状态，异步是不会执行的
+        let article = ajax(`http://localhost:8080/restful/articles/${this.id}`)
+        resolve(article);
+      }
+    }
+    async function get(){
+      let article = await new Article(3857);
+      console.log(article);
+    }
+    get();
+    /* 
+    ----------------------------------------------------
+      将异步请求的结果封装在类内部
+
+    */
+    class Art{ 
+      constructor(id){
+        this.id = id;
+      }
+      async get(){
+        // 此处如果不用 await 修饰，这个异步的请求是不会去执行的，下面直接修改这个
+        // 属性是肯定会异常的，因此要想再类的内部完成这个异步请求的过程，需要将这个
+        // 方法变成一个一个异步的方法，并在异步的请求前加上 await
+        let art = await ajax(`http://localhost:8080/restful/articles/${this.id}`)
+        // 如果上面没有 await,这里是同步代码(还没发请求拿数据)，找不到对应的属性，
+        art.resultContent.title = "this class is Art";
+        return art;
+      }
+    }
+    // 此时在外部调用这个异步获取的过程，加上await, 等待内部完成调用，返回
+    // 正确结果
+    let art = await new Art(457).get();
+    console.log(art)
+  </script>
+</html>
+
+

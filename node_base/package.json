@@ -1,0 +1,23 @@
+{
+  "name": "node_base",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "type": "module",
+  "devDependencies": {
+    "log4js": "^6.3.0"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.10",
+    "folktale": "^2.3.2",
+    "http-proxy-middleware": "^2.0.1",
+    "lodash": "^4.17.21",
+    "mime": "^2.5.2"
+  },
+  "description": ""
+}

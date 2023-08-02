@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div></div>
+</body>
+<script src=ajax.js></script>
+<script>
+  // 后台异步请求，当这些请求之间有依赖关系的时候，后一个请求依赖前一个请求的异步数据，这时候
+  // 就必须要保证请求执行的先后关系，传统的 js 写法中就必须通过嵌套调用的方式。
+  ajax(`./lesson.json`, (data) => {
+    let lessonId = data.id;
+    let lessonName = data.name;
+    ajax(`./price.json`, (source) => {
+      console.log(`lesson: ${lessonName}, price is : ${source.price}`)
+    });
+  });
+</script>
+</html>

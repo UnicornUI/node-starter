@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title></title>
+    <style type="text/css" media="">
+      .progress {
+        width: 0px;
+        height: 30px;
+        text-align: center;
+        background: purple;
+        line-height: 30px;
+        font-size: 1rem;
+        color: white;
+      }
+      .bar {
+        width: 50vw;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="bar">
+      <div class="progress">
+        0%
+      </div>
+    </div>
+  </body>
+  <script type="module">
+
+    import { ajax } from '../js/ajax.js'
+    
+    function query(id) {
+      return ajax(`http://localHost:8080/restful/articles/${id}`);
+    }
+    async function loadArticle(ids) {
+      for( let i = 0; i < ids.length; i ++ ){
+        let article = await query(ids[i]);
+        let progress = ((i + 1)/ids.length) * 100;
+        let bar = document.querySelector(".progress");
+        bar.style.width = Math.round(progress) + "%";
+        bar.innerHTML = Math.round(progress) + "%";
+      }
+    }
+    loadArticle([3925,3345,3446,4567,67857,67868,789])
+    fetch('https://112.15.232.86:38084/odnMainFrameTest/appUpdetail/getNetWorkApp.do', {
+      method: 'POST',
+    }) 
+    .then(res => {
+        console.log(res);
+    }).catch(err => {
+        console.log(err);
+    });
+  </script>
+</html>

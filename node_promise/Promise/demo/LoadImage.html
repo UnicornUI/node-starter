@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title></title>
+  </head>
+  <body>
+  </body>
+  <script type="module">
+    /**
+     * ------------------------------------------------------
+     * 异步加载图片的方式，
+     * ------------------------------------------------------
+     */
+    function loadImage(src){
+      return new Promise((resolve, reject) => {
+        const image = new Image();
+        image.src = src;
+        image.onload = () => {
+          resolve(image);
+        };
+        image.onerror = reject;
+      })
+    }
+    loadImage("../images/wallpaper.png").then(
+      image => {
+        image.style.border = "solid 2px lightcyan" 
+        document.body.appendChild(image);
+      })
+  </script>
+</html>
+
+

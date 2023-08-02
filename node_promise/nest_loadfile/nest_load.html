@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>This is a demo to test nesting loading file</title>
+  </head>
+  <body>
+    
+  </body>
+  <script>
+    function load(src, resolve){
+      let script = document.createElement("script");
+      script.src = src;
+      script.onload = resolve;
+      document.body.appendChild(script);
+    } 
+    // 代码执行是同步，但是任务被加入到任务列表是异步的，当文件之间有依赖关系，
+    // 这样加载文件偶尔因为加载的顺序不同造成访问的内容未定义，这时候就需要进行嵌套
+    // 调用，当关系复杂了之后，就会形成一种回调地狱式的代码。可读性极差。
+    //---------------------------------------------------------------
+    // 顺序加载
+    // load(japp.js",()=>{
+    //   show();
+    // });
+    // load("animation",()=>{
+    //   hello();
+    // });
+    //--------------------------------------------------------------
+    // 嵌套调用
+    load("app.js", ()=>{
+      show();
+      load("file.js", ()=>{
+        hello();
+      })
+    });
+  </script>
+</html>
